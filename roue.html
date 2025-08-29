@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roue des Premiers Ministres</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: linear-gradient(135deg, #ff4d6d, #d63384, #6f42c1);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  transition: filter 0.5s;
+}
+h1 {
+  font-size: 2.2rem;
+  color: white;
+  margin: 18px 0;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+}
+.container {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+  padding: 10px;
+}
+#mac {
+  width:260px;
+  max-width: 30vmin;
+  flex-shrink: 0;
+}
+#lever-container { position: relative; width:80px; height:250px; }
+#lever {
+  width:20px; height:150px; background:#333; position:absolute; bottom:0; left:30px;
+  transform-origin: bottom center; transition: transform 0.28s ease;
+  border-radius:6px;
+}
+#lever::after {
+  content:""; width:50px; height:50px; background:red; border-radius:50%;
+  position:absolute; top:-25px; left:-15px;
+}
+#wheel-container {
+  position: relative;
+  width: 80vmin;
+  height: 80vmin;
+  max-width: 600px;
+  max-height: 600px;
+  overflow: hidden;
+}
+#wheel {
+  width:100%; height:100%;
+  border-radius:50%;
+  border:5px solid #333;
+  position: relative;
+  transition: transform 5s cubic-bezier(0.33,1,0.68,1);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.slice-img {
+  position:absolute;
+  border-radius:50%;
+  border:2px solid #fff;
+  object-fit:cover;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+#spinBtn {
+  padding: 14px 28px; font-size:18px; cursor:pointer; margin-top:18px;
+  border:none; border-radius:10px; background:#ff4d6d; color:#fff;
+  box-shadow:0 6px 14px rgba(0,0,0,0.25);
+}
+#spinBtn:active { transform: scale(.97); }
+#spinBtn[disabled] { opacity:.6; cursor:not-allowed; }
+#result-overlay {
+  position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+  background: rgba(0,0,0,0.85); z-index:50;
+}
+#result-box {
+  background:white; padding:18px; border-radius:14px; display:flex; gap:18px;
+  align-items:center; max-width:900px; width:90%; flex-wrap:wrap;
+  animation: popin .35s ease;
+}
+@keyframes popin { from { transform: scale(.6); opacity:0 } to { transform: scale(1); opacity:1 } }
+#result-box img { max-width: 40vw; height:auto; border-radius:10px; position: relative; }
+#closeBtn { background:white; color:red; border:2px solid red; padding:10px 18px; border-radius:8px; cursor:pointer; }
+#pointer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 30px solid red;
+  z-index: 10;
+}
+@keyframes shakeAnim {
+  0% { transform: translate(0, 0) rotate(0); }
+  10% { transform: translate(-5px, 0) rotate(-1deg); }
+  20% { transform: translate(5px, 0) rotate(1deg); }
+  30% { transform: translate(-5px, 0) rotate(-1deg); }
+  40% { transform: translate(5px, 0) rotate(1deg); }
+  50% { transform: translate(-5px, 0) rotate(-1deg); }
+  60% { transform: translate(5px, 0) rotate(1deg); }
+  70% { transform: translate(-5px, 0) rotate(-1deg); }
+  80% { transform: translate(5px, 0) rotate(1deg); }
+  90% { transform: translate(-5px, 0) rotate(-1deg); }
+  100% { transform: translate(0, 0) rotate(0); }
+}
+body.shake {
+  animation: shakeAnim 0.5s infinite;
+  filter: grayscale(100%);
+}
+</style>
+</head>
+<body>
+<h1>🎡 Roue des Premiers Ministres</h1>
+<div class="container">
+  <img id="mac" src="mac.png" alt="Mac">
+  <div id="lever-container"><div id="lever"></div></div>
+  <div id="wheel-container">
+    <div id="pointer"></div>
+    <div id="wheel"></div>
+  </div>
+</div>
+<button id="spinBtn">🎡 Tourner la roue</button>
+<div id="result-overlay">
+  <div id="result-box">
+    <div id="img-container"></div>
+    <div>
+      <h2 id="res-name"></h2>
+      <p id="res-text"></p>
+      <button id="closeBtn">Fermer</button>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const data = [
+    {name:"Jordan Bardella", img:"bardella.jpg", text:"Il aurait bien accepté le poste... mais on lui a dit que ce n’était pas un emploi fictif. Du coup, il a refusé."},
+    {name:"François Bayrou", img:"bayrou.jpg", text:"Modem", special:"cross"},
+    {name:"Xavier Bertrand", img:"bertrand.jpg", text:"Toujours prompt à donner des leçons, mais aussi prompt à cumuler les échecs politiques et les revirements opportunistes."},
+    {name:"Lucie Castets", img:"castets.jpg", text:"Économiste", special:"chaos"},
+    {name:"Bernard Cazeneuve", img:"cazeneuve.jpg", text:"Ministre sous Hollande : affaires européennes, budget, intérieur puis Premier ministre. Résultat : l’UE ne tourne plus, le budget est en faillite et la police tue. Un CV idéal pour Matignon."},
+    {name:"Gérald Darmanin", img:"darmanin.jpg", text:"A fait du chantage à une femme pour obtenir des relations sexuelles avec elle. Un abus de pouvoir qui s’apparente clairement à un viol. Toujours ministre depuis 2020."},
+    {name:"Marine Le Pen", img:"lepen.jpg", text:"Saviez-vous qu’on peut devenir Première ministre tout en étant condamnée pour détournement de fonds publics ? Marine Le Pen, elle, le sait."},
+    {name:"Bruno Retailleau", img:"retailleau.jpg", text:"Un chantre de la ‘France des honnêtes gens’. Mais il soutient Sarkozy, condamné pour corruption et financement illégal de campagne. Côté idées : une obsession sécuritaire et des politiques ouvertement racistes contre les étrangers et les musulmans."},
+    {name:"Catherine Vautrin", img:"vautrin.jpg", text:"Potentielle Première ministre depuis 2020. Mais... est-ce que ‘potentielle Première ministre’ est vraiment un métier ?"},
+    {name:"Michel Barnier", img:"barnier.jpg", text:"Politicien", special:"cross"}
+  ];
+
+  const wheel = document.getElementById('wheel');
+  const spinBtn = document.getElementById('spinBtn');
+  const overlay = document.getElementById('result-overlay');
+  const nameEl = document.getElementById('res-name');
+  const textEl = document.getElementById('res-text');
+  const imgContainer = document.getElementById('img-container');
+  let currentRotation = 0;
+  const sliceAngle = 360 / data.length;
+
+  const colors = ["#FFB3BA","#BAE1FF","#BAFFC9","#FFF3BA","#FFB3F9","#FFD6A5","#CBAAFF","#9BF6FF","#BDE0FE", "#FF9AA2"];
+  wheel.style.background = `conic-gradient(${colors.map((c,i)=>`${c} ${i*sliceAngle}deg ${(i+1)*sliceAngle}deg`).join(",")})`;
+
+  const imgs = [];
+  data.forEach((p, i) => {
+    const img = document.createElement('img');
+    img.src = p.img;
+    img.alt = p.name;
+    img.className = 'slice-img';
+    img.dataset.index = i;
+    wheel.appendChild(img);
+    imgs.push(img);
+    img.onload = positionImages;
+  });
+
+  function positionImages() {
+    const w = wheel.clientWidth;
+    const center = w / 2;
+    const outerRadius = w / 2;
+    imgs.forEach((img, i) => {
+      const angDeg = i * sliceAngle + sliceAngle / 2;
+      const ang = angDeg * Math.PI / 180;
+      const radius = outerRadius * 0.7;
+      const maxDiameter = 2 * outerRadius * Math.sin(sliceAngle * Math.PI / 360) * 0.5;
+      img.style.width = img.style.height = `${maxDiameter}px`;
+      const x = center + radius * Math.sin(ang);
+      const y = center - radius * Math.cos(ang);
+      img.style.left = `${x}px`;
+      img.style.top = `${y}px`;
+    });
+  }
+
+  positionImages();
+  window.addEventListener('resize', positionImages);
+
+  // ---- Ordre fixe ----
+  const fixedOrder = [
+    "Jordan Bardella",
+    "Catherine Vautrin",
+    "Bernard Cazeneuve",
+    "François Bayrou",
+    "Marine Le Pen",
+    "Xavier Bertrand",
+    "Lucie Castets",
+    "Bruno Retailleau",
+    "Michel Barnier",
+    "Gérald Darmanin"
+  ];
+  let fixedIndex = 0;
+
+  function spinWheel() {
+    if(spinBtn.disabled) return;
+    spinBtn.disabled = true;
+
+    const lever = document.getElementById('lever');
+    lever.style.transform = 'rotate(-30deg)';
+    setTimeout(() => lever.style.transform = 'rotate(0deg)', 300);
+
+    const personName = fixedOrder[fixedIndex];
+    const targetIndex = data.findIndex(p => p.name === personName);
+    fixedIndex = (fixedIndex + 1) % fixedOrder.length;
+
+    const spins = 5 * 360;
+    const finalAngle = 360 - (targetIndex * sliceAngle + sliceAngle/2);
+    const targetRotation = currentRotation + spins + finalAngle - (currentRotation % 360);
+    currentRotation = targetRotation;
+
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+    const onEnd = () => {
+      wheel.removeEventListener('transitionend', onEnd);
+      showResult(data[targetIndex]);
+      spinBtn.disabled = false;
+    };
+    wheel.addEventListener('transitionend', onEnd);
+  }
+
+  function showResult(person) {
+    imgContainer.style.position = "relative";
+    imgContainer.innerHTML = `<img src="${person.img}" alt="${person.name}">`;
+
+    nameEl.textContent = person.name;
+    textEl.textContent = person.text;
+    textEl.style.color = "black";
+
+    overlay.style.display = 'flex';
+
+    if(person.special === "cross") {
+      const cross = document.createElement('div');
+      cross.style.position = "absolute";
+      cross.style.top = "0";
+      cross.style.left = "0";
+      cross.style.width = "100%";
+      cross.style.height = "100%";
+      cross.style.pointerEvents = "none";
+
+      const line1 = document.createElement('div');
+      const line2 = document.createElement('div');
+      [line1, line2].forEach(line => {
+        line.style.position = "absolute";
+        line.style.width = "6px"; 
+        line.style.height = "100%";
+        line.style.background = "red";
+        line.style.top = "0";
+        line.style.left = "50%";
+        line.style.transformOrigin = "center";
+      });
+      line1.style.transform = "translateX(-50%) rotate(45deg)";
+      line2.style.transform = "translateX(-50%) rotate(-45deg)";
+
+      cross.appendChild(line1);
+      cross.appendChild(line2);
+      imgContainer.appendChild(cross);
+
+      textEl.textContent = "On a déjà essayé !";
+      textEl.style.color = "red";
+    }
+
+    if(person.special === "chaos") {
+      spinBtn.disabled = true; 
+      document.body.classList.add('shake'); 
+
+      setTimeout(() => {
+        const tempBox = document.createElement('div');
+        tempBox.style.position = 'fixed';
+        tempBox.style.top = '50%';
+        tempBox.style.left = '50%';
+        tempBox.style.transform = 'translate(-50%, -50%)';
+        tempBox.style.background = 'white';
+        tempBox.style.padding = '20px';
+        tempBox.style.borderRadius = '10px';
+        tempBox.style.zIndex = 100;
+        tempBox.style.textAlign = 'center';
+        tempBox.style.fontSize = '1.2rem';
+        tempBox.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
+        tempBox.textContent = "Le résultat de la loterie c'est comme le résultat des élections, on n’est pas obligé de le respecter.";
+        document.body.appendChild(tempBox);
+
+        setTimeout(() => {
+          document.body.removeChild(tempBox);
+          overlay.style.display = 'none';
+          document.body.classList.remove('shake');
+
+          setTimeout(() => {
+            spinBtn.disabled = false;
+            spinWheel();
+          }, 200);
+        }, 5000);
+      }, 1000);
+    }
+  }
+
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+
+  spinBtn.addEventListener('click', spinWheel);
+});
+</script>
+</body>
+</html>
