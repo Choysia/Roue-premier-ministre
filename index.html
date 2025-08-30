@@ -29,7 +29,7 @@ h1 {
   padding: 10px;
 }
 #mac { width: 350px; max-width: 40vmin; flex-shrink: 0; }
-#lever-container { position: relative; width: 80px; height: 250px; }
+#lever-container { position: relative; width: 80px; height: 250px; cursor:pointer; }
 #lever-base { width: 60px; height: 20px; background: #333; border-radius: 10px; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); box-shadow: inset 0 -3px 5px rgba(0,0,0,0.5); }
 #lever { width: 22px; height: 140px; background: linear-gradient(to top, #555 0%, #999 100%); position: absolute; bottom: 20px; left: 50%; transform-origin: bottom center; transition: transform 0.28s cubic-bezier(0.33,1,0.68,1); border-radius:6px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); }
 #lever::after { content:""; width:50px; height:50px; background: radial-gradient(circle at 30% 30%, red, darkred); border-radius:50%; position:absolute; top:-25px; left:-15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const nameEl = document.getElementById('res-name');
   const textEl = document.getElementById('res-text');
   const imgContainer = document.getElementById('img-container');
+  const lever = document.getElementById('lever-container'); // levier cliquable
   let currentRotation = 0;
   const sliceAngle = 360 / data.length;
 
@@ -185,9 +186,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
   function spinWheel() {
     if(spinBtn.disabled) return;
     spinBtn.disabled = true;
-    const lever = document.getElementById('lever');
-    lever.style.transform = `rotate(-30deg)`;
-    setTimeout(()=>lever.style.transform='rotate(0deg)',300);
+    const leverEl = document.getElementById('lever');
+    leverEl.style.transform = `rotate(-30deg)`;
+    setTimeout(()=>leverEl.style.transform='rotate(0deg)',300);
 
     const personName = fixedOrder[fixedIndex];
     const targetIndex = data.findIndex(p=>p.name===personName);
@@ -211,13 +212,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
   function showResult(person){
     imgContainer.style.position="relative";
 
-    // CAS SPECIAL : Lucie Castets
     if(person.name==="Lucie Castets"){
       spinBtn.disabled = true;
       overlay.style.display = "none";
       imgContainer.innerHTML = "";
-
-      document.body.classList.add('shake'); // tremblement de tout l'écran
+      document.body.classList.add('shake');
 
       const chaosScreen = document.createElement('div');
       Object.assign(chaosScreen.style,{
@@ -226,7 +225,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         alignItems:'center', justifyContent:'center',
         zIndex:1000, filter:'grayscale(100%)'
       });
-
       const chaosImg = document.createElement('img');
       chaosImg.src = person.img;
       chaosImg.alt = person.name;
@@ -248,20 +246,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
                              <p>Le résultat de la loterie c'est comme le résultat des élections, on n’est pas obligé de le respecter.</p>`;
         document.body.appendChild(tempBox);
 
-        // fermeture automatique après 3s
         setTimeout(()=>{
           document.body.removeChild(tempBox);
           document.body.removeChild(chaosScreen);
-          document.body.classList.remove('shake'); // fin du chaos
+          document.body.classList.remove('shake');
           spinBtn.disabled = false;
-          spinWheel(); // relance automatique
+          spinWheel();
         },3000);
       },1000);
-
       return;
     }
 
-    // AUTRES CAS
     overlay.style.display='flex';
     imgContainer.innerHTML=`<img src="${person.img}" alt="${person.name}">`;
     nameEl.textContent = person.name;
@@ -301,6 +296,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   document.getElementById('closeBtn').addEventListener('click',()=>{overlay.style.display='none';});
   spinBtn.addEventListener('click',spinWheel);
+
+  // RENDRE LE LEVIER CLIQUABLE
+  lever.addEventListener('click', spinWheel);
 });
 </script>
 </body>
