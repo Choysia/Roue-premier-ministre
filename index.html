@@ -11,8 +11,8 @@ body {
   background: linear-gradient(135deg, #ff4d6d, #d63384, #6f42c1);
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
-  transition: filter 0.5s;
+  overflow: hidden;
+  transition: filter 0.5s ease;
 }
 h1 {
   font-size: 2.2rem;
@@ -28,101 +28,45 @@ h1 {
   flex-wrap:wrap;
   padding: 10px;
 }
-#mac {
-  width:260px;
-  max-width: 30vmin;
-  flex-shrink: 0;
-}
-#lever-container { position: relative; width:80px; height:250px; }
-#lever {
-  width:20px; height:150px; background:#333; position:absolute; bottom:0; left:30px;
-  transform-origin: bottom center; transition: transform 0.28s ease;
-  border-radius:6px;
-}
-#lever::after {
-  content:""; width:50px; height:50px; background:red; border-radius:50%;
-  position:absolute; top:-25px; left:-15px;
-}
-#wheel-container {
-  position: relative;
-  width: 80vmin;
-  height: 80vmin;
-  max-width: 600px;
-  max-height: 600px;
-  overflow: hidden;
-}
-#wheel {
-  width:100%; height:100%;
-  border-radius:50%;
-  border:5px solid #333;
-  position: relative;
-  transition: transform 5s cubic-bezier(0.33,1,0.68,1);
-  will-change: transform;
-  backface-visibility: hidden;
-}
-.slice-img {
-  position:absolute;
-  border-radius:50%;
-  border:2px solid #fff;
-  object-fit:cover;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-#spinBtn {
-  padding: 14px 28px; font-size:18px; cursor:pointer; margin-top:18px;
-  border:none; border-radius:10px; background:#ff4d6d; color:#fff;
-  box-shadow:0 6px 14px rgba(0,0,0,0.25);
-}
+#mac { width: 350px; max-width: 40vmin; flex-shrink: 0; }
+#lever-container { position: relative; width: 80px; height: 250px; }
+#lever-base { width: 60px; height: 20px; background: #333; border-radius: 10px; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); box-shadow: inset 0 -3px 5px rgba(0,0,0,0.5); }
+#lever { width: 22px; height: 140px; background: linear-gradient(to top, #555 0%, #999 100%); position: absolute; bottom: 20px; left: 50%; transform-origin: bottom center; transition: transform 0.28s cubic-bezier(0.33,1,0.68,1); border-radius:6px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); }
+#lever::after { content:""; width:50px; height:50px; background: radial-gradient(circle at 30% 30%, red, darkred); border-radius:50%; position:absolute; top:-25px; left:-15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+#wheel-container { position: relative; width: 78vmin; height: 78vmin; max-width: 600px; max-height: 600px; overflow: visible; }
+#wheel { width:100%; height:100%; border-radius:50%; border:5px solid #333; position: relative; transition: transform 5s cubic-bezier(0.33,1,0.68,1); will-change: transform; backface-visibility: hidden; }
+.slice-img { position:absolute; border-radius:50%; border:2px solid #fff; object-fit:cover; transform: translate(-50%, -50%); pointer-events: none; }
+#wheel .wheel-light { position: absolute; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; border: 1px solid black; }
+#spinBtn { padding: 14px 28px; font-size:18px; cursor:pointer; margin-top:18px; border:none; border-radius:10px; background:#ff4d6d; color:#fff; box-shadow:0 6px 14px rgba(0,0,0,0.25); }
 #spinBtn:active { transform: scale(.97); }
 #spinBtn[disabled] { opacity:.6; cursor:not-allowed; }
-#result-overlay {
-  position:fixed; inset:0; display:none; align-items:center; justify-content:center;
-  background: rgba(0,0,0,0.85); z-index:50;
-}
-#result-box {
-  background:white; padding:18px; border-radius:14px; display:flex; gap:18px;
-  align-items:center; max-width:900px; width:90%; flex-wrap:wrap;
-  animation: popin .35s ease;
-}
+#result-overlay { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.85); z-index:50; }
+#result-box { background:white; padding:18px; border-radius:14px; display:flex; gap:18px; align-items:center; max-width:900px; width:90%; flex-wrap:wrap; animation: popin .35s ease; }
 @keyframes popin { from { transform: scale(.6); opacity:0 } to { transform: scale(1); opacity:1 } }
 #result-box img { max-width: 40vw; height:auto; border-radius:10px; position: relative; }
 #closeBtn { background:white; color:red; border:2px solid red; padding:10px 18px; border-radius:8px; cursor:pointer; }
-#pointer {
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 30px solid red;
-  z-index: 10;
+#pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid red; z-index: 10; }
+
+/* shake animation pour tout l'écran */
+@keyframes shake {
+  0% { transform: translate(0,0); }
+  20% { transform: translate(-8px,4px); }
+  40% { transform: translate(6px,-3px); }
+  60% { transform: translate(-4px,2px); }
+  80% { transform: translate(4px,-2px); }
+  100% { transform: translate(0,0); }
 }
-@keyframes shakeAnim {
-  0% { transform: translate(0, 0) rotate(0); }
-  10% { transform: translate(-5px, 0) rotate(-1deg); }
-  20% { transform: translate(5px, 0) rotate(1deg); }
-  30% { transform: translate(-5px, 0) rotate(-1deg); }
-  40% { transform: translate(5px, 0) rotate(1deg); }
-  50% { transform: translate(-5px, 0) rotate(-1deg); }
-  60% { transform: translate(5px, 0) rotate(1deg); }
-  70% { transform: translate(-5px, 0) rotate(-1deg); }
-  80% { transform: translate(5px, 0) rotate(1deg); }
-  90% { transform: translate(-5px, 0) rotate(-1deg); }
-  100% { transform: translate(0, 0) rotate(0); }
-}
-body.shake {
-  animation: shakeAnim 0.5s infinite;
-  filter: grayscale(100%);
-}
+.shake { animation: shake 0.5s ease-in-out infinite; }
 </style>
 </head>
 <body>
 <h1>🎡 Roue des Premiers Ministres</h1>
 <div class="container">
   <img id="mac" src="mac.png" alt="Mac">
-  <div id="lever-container"><div id="lever"></div></div>
+  <div id="lever-container">
+    <div id="lever-base"></div>
+    <div id="lever"></div>
+  </div>
   <div id="wheel-container">
     <div id="pointer"></div>
     <div id="wheel"></div>
@@ -139,6 +83,7 @@ body.shake {
     </div>
   </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
   const data = [
@@ -147,11 +92,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
     {name:"Xavier Bertrand", img:"bertrand.jpg", text:"Toujours prompt à donner des leçons, mais aussi prompt à cumuler les échecs politiques et les revirements opportunistes."},
     {name:"Lucie Castets", img:"castets.jpg", text:"Économiste", special:"chaos"},
     {name:"Bernard Cazeneuve", img:"cazeneuve.jpg", text:"Ministre sous Hollande : affaires européennes, budget, intérieur puis Premier ministre. Résultat : l’UE ne tourne plus, le budget est en faillite et la police tue. Un CV idéal pour Matignon."},
-    {name:"Gérald Darmanin", img:"darmanin.jpg", text:"A fait du chantage à une femme pour obtenir des relations sexuelles avec elle. Un abus de pouvoir qui s’apparente clairement à un viol. Toujours ministre depuis 2020."},
+    {name:"Gérald Darmanin", img:"darmanin.jpg", text:"A fait du chantage à une femme pour obtenir des relations sexuelles. Un abus de pouvoir, un viol. Toujours ministre depuis 2020."},
+    {name:"François Baroin", img:"baroin.jpg", text:"Un éternel notable de droite. Historique terne, toujours là pour préserver ses intérêts."},
     {name:"Marine Le Pen", img:"lepen.jpg", text:"Saviez-vous qu’on peut devenir Première ministre tout en étant condamnée pour détournement de fonds publics ? Marine Le Pen, elle, le sait."},
-    {name:"Bruno Retailleau", img:"retailleau.jpg", text:"Un chantre de la ‘France des honnêtes gens’. Mais il soutient Sarkozy, condamné pour corruption et financement illégal de campagne. Côté idées : une obsession sécuritaire et des politiques ouvertement racistes contre les étrangers et les musulmans."},
+    {name:"Bruno Retailleau", img:"retailleau.jpg", text:"Son slogan : ‘La France des honnêtes gens’. Chef des LR et soutien de Sarkozy, condamné pour corruption et financement illégal de campagne. Côté idées : une obsession sécuritaire et des politiques ouvertement racistes contre les étrangers et les musulmans."},
+    {name:"Raphaël Glucksmann", img:"glucksmann.jpg", text:"Un autre Macron est possible."},
     {name:"Catherine Vautrin", img:"vautrin.jpg", text:"Potentielle Première ministre depuis 2020. Mais... est-ce que ‘potentielle Première ministre’ est vraiment un métier ?"},
-    {name:"Michel Barnier", img:"barnier.jpg", text:"Politicien", special:"cross"}
+    {name:"Michel Barnier", img:"barnier.jpg", text:"Politicien", special:"cross"},
+    {name:"Olivier Faure", img:"faure.jpg", text:"Chef du PS, soutien fidèle de Hollande. Jamais frondeur, toujours suiveur, rôle de normalisation de l’échec.", special:"faure"},
+    {name:"Bruno Le Maire", img:"lemaire.jpg", text:"Longtemps ministre du budget, la France est en faillite. « Bruno Demande » beaucoup, mais personne ne l'écoute."},
+    {name:"Sébastien Lecornu", img:"lecornu.jpg", text:"Issu du même moule que Macron : carriériste, technocrate, sans vision pour le peuple."},
+    {name:"Christine Lagarde", img:"lagarde.jpg", text:"FMI, austérité, crise grecque... Son bilan, c’est la casse sociale et la soumission aux marchés."},
+    {name:"Laurent Berger", img:"berger.jpg", text:"La CFDT, sous sa direction, a souvent soutenu l’État et abandonné les travailleurs."}
   ];
 
   const wheel = document.getElementById('wheel');
@@ -163,8 +115,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
   let currentRotation = 0;
   const sliceAngle = 360 / data.length;
 
-  const colors = ["#FFB3BA","#BAE1FF","#BAFFC9","#FFF3BA","#FFB3F9","#FFD6A5","#CBAAFF","#9BF6FF","#BDE0FE", "#FF9AA2"];
-  wheel.style.background = `conic-gradient(${colors.map((c,i)=>`${c} ${i*sliceAngle}deg ${(i+1)*sliceAngle}deg`).join(",")})`;
+  const colors = ["#FF9999","#99CCFF","#99FF99","#FFFF99","#FF99FF","#FFD699","#CC99FF","#99FFFF","#BDE0FE", "#FF9AAA","#FFD1DC","#C0FFB3","#B3E5FF","#E6B3FF","#FFCCB3","#C2B3FF","#FFF0B3"];
+  const wheelColors = data.map((_, i) => colors[i % colors.length]);
+  wheel.style.background = `conic-gradient(${wheelColors.map((c,i)=>`${c} ${i*sliceAngle}deg ${(i+1)*sliceAngle}deg`).join(",")})`;
 
   const imgs = [];
   data.forEach((p, i) => {
@@ -194,132 +147,160 @@ document.addEventListener('DOMContentLoaded', ()=>{
       img.style.top = `${y}px`;
     });
   }
-
   positionImages();
   window.addEventListener('resize', positionImages);
 
-  // ---- Ordre fixe ----
+  const numLights = 120;
+  const wheelRadius = wheel.clientWidth / 2;
+  const lightColors = ["#fff200", "#ff3d3d", "#3dd1ff", "#ffffff"];
+  for (let i = 0; i < numLights; i++) {
+    const light = document.createElement('div');
+    light.className = 'wheel-light';
+    const angle = (i / numLights) * 2 * Math.PI;
+    const r = wheelRadius;
+    const x = wheelRadius + r * Math.cos(angle);
+    const y = wheelRadius + r * Math.sin(angle);
+    light.style.left = `${x}px`;
+    light.style.top = `${y}px`;
+    light.style.background = lightColors[i % lightColors.length];
+    light.style.border = '1px solid black';
+    wheel.appendChild(light);
+  }
+  setInterval(() => {
+    document.querySelectorAll('.wheel-light').forEach(light => {
+      light.style.opacity = (0.5 + Math.random() * 0.5).toFixed(2);
+      const size = 6 + Math.random() * 4;
+      light.style.width = light.style.height = `${size}px`;
+    });
+  }, 200);
+
   const fixedOrder = [
-    "Jordan Bardella",
-    "Catherine Vautrin",
-    "Bernard Cazeneuve",
-    "François Bayrou",
-    "Marine Le Pen",
-    "Xavier Bertrand",
-    "Lucie Castets",
-    "Bruno Retailleau",
-    "Michel Barnier",
-    "Gérald Darmanin"
+    "Jordan Bardella","Catherine Vautrin","Bernard Cazeneuve","François Bayrou",
+    "François Baroin","Marine Le Pen","Xavier Bertrand","Lucie Castets",
+    "Bruno Retailleau","Raphaël Glucksmann","Michel Barnier","Gérald Darmanin",
+    "Olivier Faure","Bruno Le Maire","Sébastien Lecornu","Christine Lagarde","Laurent Berger"
   ];
   let fixedIndex = 0;
 
   function spinWheel() {
     if(spinBtn.disabled) return;
     spinBtn.disabled = true;
-
     const lever = document.getElementById('lever');
-    lever.style.transform = 'rotate(-30deg)';
-    setTimeout(() => lever.style.transform = 'rotate(0deg)', 300);
+    lever.style.transform = `rotate(-30deg)`;
+    setTimeout(()=>lever.style.transform='rotate(0deg)',300);
 
     const personName = fixedOrder[fixedIndex];
-    const targetIndex = data.findIndex(p => p.name === personName);
-    fixedIndex = (fixedIndex + 1) % fixedOrder.length;
+    const targetIndex = data.findIndex(p=>p.name===personName);
+    fixedIndex = (fixedIndex+1)%fixedOrder.length;
 
-    const spins = 5 * 360;
-    const finalAngle = 360 - (targetIndex * sliceAngle + sliceAngle/2);
-    const targetRotation = currentRotation + spins + finalAngle - (currentRotation % 360);
+    const spins = 5*360;
+    const finalAngle = 360 - (targetIndex*sliceAngle + sliceAngle/2);
+    const targetRotation = currentRotation + spins + finalAngle - (currentRotation%360);
     currentRotation = targetRotation;
 
     wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-    const onEnd = () => {
-      wheel.removeEventListener('transitionend', onEnd);
+    const onEnd = ()=>{
+      wheel.removeEventListener('transitionend',onEnd);
       showResult(data[targetIndex]);
       spinBtn.disabled = false;
     };
-    wheel.addEventListener('transitionend', onEnd);
+    wheel.addEventListener('transitionend',onEnd);
   }
 
-  function showResult(person) {
-    imgContainer.style.position = "relative";
-    imgContainer.innerHTML = `<img src="${person.img}" alt="${person.name}">`;
+  function showResult(person){
+    imgContainer.style.position="relative";
 
+    // CAS SPECIAL : Lucie Castets
+    if(person.name==="Lucie Castets"){
+      spinBtn.disabled = true;
+      overlay.style.display = "none";
+      imgContainer.innerHTML = "";
+
+      document.body.classList.add('shake'); // tremblement de tout l'écran
+
+      const chaosScreen = document.createElement('div');
+      Object.assign(chaosScreen.style,{
+        position:'fixed', top:'0', left:'0', width:'100%', height:'100%',
+        background:'rgba(0,0,0,0.9)', display:'flex',
+        alignItems:'center', justifyContent:'center',
+        zIndex:1000, filter:'grayscale(100%)'
+      });
+
+      const chaosImg = document.createElement('img');
+      chaosImg.src = person.img;
+      chaosImg.alt = person.name;
+      chaosImg.style.maxWidth = '40vw';
+      chaosImg.style.borderRadius='10px';
+      chaosScreen.appendChild(chaosImg);
+      document.body.appendChild(chaosScreen);
+
+      setTimeout(()=>{
+        const tempBox = document.createElement('div');
+        Object.assign(tempBox.style,{
+          position:'fixed', top:'50%', left:'50%',
+          transform:'translate(-50%,-50%)',
+          background:'white', padding:'20px', borderRadius:'10px',
+          zIndex:1001, textAlign:'center', fontSize:'1.2rem',
+          boxShadow:'0 4px 10px rgba(0,0,0,0.3)'
+        });
+        tempBox.innerHTML = `<h2>${person.name}</h2>
+                             <p>Le résultat de la loterie c'est comme le résultat des élections, on n’est pas obligé de le respecter.</p>`;
+        document.body.appendChild(tempBox);
+
+        // fermeture automatique après 3s
+        setTimeout(()=>{
+          document.body.removeChild(tempBox);
+          document.body.removeChild(chaosScreen);
+          document.body.classList.remove('shake'); // fin du chaos
+          spinBtn.disabled = false;
+          spinWheel(); // relance automatique
+        },3000);
+      },1000);
+
+      return;
+    }
+
+    // AUTRES CAS
+    overlay.style.display='flex';
+    imgContainer.innerHTML=`<img src="${person.img}" alt="${person.name}">`;
     nameEl.textContent = person.name;
     textEl.textContent = person.text;
-    textEl.style.color = "black";
+    textEl.style.color="black";
 
-    overlay.style.display = 'flex';
-
-    if(person.special === "cross") {
+    if(person.special==="cross"){
       const cross = document.createElement('div');
-      cross.style.position = "absolute";
-      cross.style.top = "0";
-      cross.style.left = "0";
-      cross.style.width = "100%";
-      cross.style.height = "100%";
-      cross.style.pointerEvents = "none";
+      cross.style.position="absolute";
+      cross.style.top="0"; cross.style.left="0";
+      cross.style.width="100%"; cross.style.height="100%";
+      cross.style.pointerEvents="none";
 
-      const line1 = document.createElement('div');
-      const line2 = document.createElement('div');
-      [line1, line2].forEach(line => {
-        line.style.position = "absolute";
-        line.style.width = "6px"; 
-        line.style.height = "100%";
-        line.style.background = "red";
-        line.style.top = "0";
-        line.style.left = "50%";
-        line.style.transformOrigin = "center";
+      const line1=document.createElement('div');
+      const line2=document.createElement('div');
+      [line1,line2].forEach(line=>{
+        line.style.position="absolute";
+        line.style.width="6px"; line.style.height="100%";
+        line.style.background="red"; line.style.top="0";
+        line.style.left="50%"; line.style.transformOrigin="center";
       });
-      line1.style.transform = "translateX(-50%) rotate(45deg)";
-      line2.style.transform = "translateX(-50%) rotate(-45deg)";
-
+      line1.style.transform="translateX(-50%) rotate(45deg)";
+      line2.style.transform="translateX(-50%) rotate(-45deg)";
       cross.appendChild(line1);
       cross.appendChild(line2);
       imgContainer.appendChild(cross);
 
-      textEl.textContent = "On a déjà essayé !";
-      textEl.style.color = "red";
+      textEl.textContent="On a déjà essayé !";
+      textEl.style.color="red";
     }
 
-    if(person.special === "chaos") {
-      spinBtn.disabled = true; 
-      document.body.classList.add('shake'); 
-
-      setTimeout(() => {
-        const tempBox = document.createElement('div');
-        tempBox.style.position = 'fixed';
-        tempBox.style.top = '50%';
-        tempBox.style.left = '50%';
-        tempBox.style.transform = 'translate(-50%, -50%)';
-        tempBox.style.background = 'white';
-        tempBox.style.padding = '20px';
-        tempBox.style.borderRadius = '10px';
-        tempBox.style.zIndex = 100;
-        tempBox.style.textAlign = 'center';
-        tempBox.style.fontSize = '1.2rem';
-        tempBox.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
-        tempBox.textContent = "Le résultat de la loterie c'est comme le résultat des élections, on n’est pas obligé de le respecter.";
-        document.body.appendChild(tempBox);
-
-        setTimeout(() => {
-          document.body.removeChild(tempBox);
-          overlay.style.display = 'none';
-          document.body.classList.remove('shake');
-
-          setTimeout(() => {
-            spinBtn.disabled = false;
-            spinWheel();
-          }, 200);
-        }, 5000);
-      }, 1000);
+    if(person.special==="faure"){
+      imgContainer.innerHTML=`<img src="hollande.jpg" alt="Hollande">`;
+      setTimeout(()=>{imgContainer.innerHTML=`<img src="${person.img}" alt="${person.name}">`;},1000);
     }
   }
 
-  document.getElementById('closeBtn').addEventListener('click', () => {
-    overlay.style.display = 'none';
-  });
-
-  spinBtn.addEventListener('click', spinWheel);
+  document.getElementById('closeBtn').addEventListener('click',()=>{overlay.style.display='none';});
+  spinBtn.addEventListener('click',spinWheel);
 });
 </script>
 </body>
