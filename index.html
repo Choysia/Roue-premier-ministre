@@ -106,6 +106,51 @@ h1 {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Roue des Premiers Ministres</title>
+/* ===== Responsive Mobile ===== */
+@media (max-width: 500px) {
+  .container {
+    flex-direction: column;       /* empile les éléments verticalement */
+    gap: 3vmin;
+    align-items: center;
+  }
+
+  #mac {
+    width: 50vw;
+    max-width: 200px;
+  }
+
+  #lever-container {
+    width: 50px;
+    height: 180px;
+  }
+
+  #lever {
+    width: 15px;
+    height: 100px;
+    bottom: 15px;
+  }
+
+  #lever::after {
+    width: 35px;
+    height: 35px;
+    top: -17px;
+    left: -10px;
+  }
+
+  #wheel-container {
+    width: 60vmin;
+    height: 60vmin;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  #spinBtn {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin-top: 2vmin;
+  }
+}
+
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -194,7 +239,7 @@ h1 {
 </head>
 <body>
 <h1>🎡 Roue des Premiers Ministres</h1>
-<p id="consigne">Bayrou est tombé, mais qui prendra sa place ? Toi aussi prends tes responsabilités et nomme un Premier ministre à la hauteur de l'enjeu !</p>
+<p id="consigne">Bayrou est tombé, mais qui prendra sa place ? Toi aussi prends tes responsabilités : tire sur le levier et nomme un Premier ministre à la hauteur de l'enjeu !</p>
 <div class="container">
   <img id="mac" src="mac.png" alt="Mac">
   <div id="lever-container">
