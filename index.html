@@ -36,7 +36,25 @@ h1 {
   margin-right: auto;
 }
 
-.container {
+/* Conteneur principal pour l'image mac et le reste */
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+#mac {
+  width: 350px;
+  max-width: 40vmin;
+  flex-shrink: 0;
+}
+
+/* Conteneur pour le levier et la roue */
+.lever-wheel-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,27 +63,153 @@ h1 {
   padding: 10px;
 }
 
-#mac { width: 350px; max-width: 40vmin; flex-shrink: 0; }
+#lever-container {
+  position: relative;
+  width: 80px;
+  height: 250px;
+  cursor: pointer;
+}
 
-#lever-container { position: relative; width: 80px; height: 250px; cursor: pointer; }
-#lever-base { width: 60px; height: 20px; background: #333; border-radius: 10px; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); box-shadow: inset 0 -3px 5px rgba(0,0,0,0.5); }
-#lever { width: 22px; height: 140px; background: linear-gradient(to top, #555 0%, #999 100%); position: absolute; bottom: 20px; left: 50%; transform-origin: bottom center; transition: transform 0.28s cubic-bezier(0.33,1,0.68,1); border-radius:6px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); }
-#lever::after { content:""; width:50px; height:50px; background: radial-gradient(circle at 30% 30%, red, darkred); border-radius:50%; position:absolute; top:-25px; left:-15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+#lever-base {
+  width: 60px;
+  height: 20px;
+  background: #333;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: inset 0 -3px 5px rgba(0,0,0,0.5);
+}
 
-#wheel-container { position: relative; width: 78vmin; height: 78vmin; max-width: 600px; max-height: 600px; overflow: visible; }
-#wheel { width: 100%; height: 100%; border-radius: 50%; border:5px solid #fff; position: relative; transition: transform 5s cubic-bezier(0.33,1,0.68,1); will-change: transform; backface-visibility: hidden; box-shadow: 0 0 4px rgba(255,255,255,0.4), 0 0 8px #ff4d6d; }
+#lever {
+  width: 22px;
+  height: 140px;
+  background: linear-gradient(to top, #555 0%, #999 100%);
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform-origin: bottom center;
+  transition: transform 0.28s cubic-bezier(0.33,1,0.68,1);
+  border-radius:6px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
 
-.slice-img { position:absolute; border-radius:50%; border:2px solid #fff; object-fit: cover; transform: translate(-50%, -50%); pointer-events: auto; cursor:pointer; }
-#hover-name { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; font-weight:bold; text-shadow:0 0 6px rgba(0,0,0,0.7); pointer-events:none; font-size:1.2rem; }
+#lever::after {
+  content:"";
+  width:50px;
+  height:50px;
+  background: radial-gradient(circle at 30% 30%, red, darkred);
+  border-radius:50%;
+  position:absolute;
+  top:-25px;
+  left:-15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
 
-#spinBtn { padding: 14px 28px; font-size:18px; cursor:pointer; margin-top:18px; border:none; border-radius:10px; background:#ff4d6d; color:#fff; box-shadow:0 6px 14px rgba(0,0,0,0.4), 0 0 20px #ff99cc; }
-#spinBtn:active { transform: scale(.97); }
-#spinBtn[disabled] { opacity:.6; cursor:not-allowed; }
+#wheel-container {
+  position: relative;
+  width: 78vmin;
+  height: 78vmin;
+  max-width: 600px;
+  max-height: 600px;
+  overflow: visible;
+}
 
-#result-overlay { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.85); z-index:50; }
-#result-box { background:white; padding:18px; border-radius:14px; display:flex; gap:18px; align-items:center; max-width:900px; width:90%; flex-wrap:wrap; animation: popin .35s ease; box-shadow: none; }
-#result-box img { max-width: 40vw; height:auto; border-radius:10px; position: relative; }
-#closeBtn { background:white; color:red; border:2px solid red; padding:10px 18px; border-radius:8px; cursor:pointer; }
+#wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border:5px solid #fff;
+  position: relative;
+  transition: transform 5s cubic-bezier(0.33,1,0.68,1);
+  will-change: transform;
+  backface-visibility: hidden;
+  box-shadow: 0 0 4px rgba(255,255,255,0.4), 0 0 8px #ff4d6d;
+}
+
+.slice-img {
+  position:absolute;
+  border-radius:50%;
+  border:2px solid #fff;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor:pointer;
+}
+
+#hover-name {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  color:white;
+  font-weight:bold;
+  text-shadow:0 0 6px rgba(0,0,0,0.7);
+  pointer-events:none;
+  font-size:1.2rem;
+}
+
+#spinBtn {
+  padding: 14px 28px;
+  font-size:18px;
+  cursor:pointer;
+  margin-top:18px;
+  border:none;
+  border-radius:10px;
+  background:#ff4d6d;
+  color:#fff;
+  box-shadow:0 6px 14px rgba(0,0,0,0.4), 0 0 20px #ff99cc;
+}
+
+#spinBtn:active {
+  transform: scale(.97);
+}
+
+#spinBtn[disabled] {
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+#result-overlay {
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,0.85);
+  z-index:50;
+}
+
+#result-box {
+  background:white;
+  padding:18px;
+  border-radius:14px;
+  display:flex;
+  gap:18px;
+  align-items:center;
+  max-width:900px;
+  width:90%;
+  flex-wrap:wrap;
+  animation: popin .35s ease;
+  box-shadow: none;
+}
+
+#result-box img {
+  max-width: 40vw;
+  height:auto;
+  border-radius:10px;
+  position: relative;
+}
+
+#closeBtn {
+  background:white;
+  color:red;
+  border:2px solid red;
+  padding:10px 18px;
+  border-radius:8px;
+  cursor:pointer;
+}
 
 #pointer {
   position: absolute;
@@ -88,12 +232,24 @@ h1 {
   80% { transform: translate(4px,-2px); }
   100% { transform: translate(0,0); }
 }
-.shake { animation: shake 0.5s ease-in-out infinite; }
 
-@keyframes rise { from { transform: translateY(100%); opacity:0; } to { transform: translateY(0); opacity:1; } }
-.mac-rise { animation: rise 1.5s ease-out forwards; }
+.shake {
+  animation: shake 0.5s ease-in-out infinite;
+}
 
-@keyframes popin { from { transform: scale(.6); opacity:0 } to { transform: scale(1); opacity:1 } }
+@keyframes rise {
+  from { transform: translateY(100%); opacity:0; }
+  to { transform: translateY(0); opacity:1; }
+}
+
+.mac-rise {
+  animation: rise 1.5s ease-out forwards;
+}
+
+@keyframes popin {
+  from { transform: scale(.6); opacity:0 }
+  to { transform: scale(1); opacity:1 }
+}
 
 /* ===== Responsive Mobile ===== */
 @media (max-width: 500px) {
@@ -106,14 +262,18 @@ h1 {
   #consigne {
     font-size: 0.9rem;
   }
-  .container {
+  .main-container {
     flex-direction: column;
     gap: 4vmin;
     align-items: center;
   }
   #mac {
-    width: 50vw;
-    max-width: 200px;
+    display: none; /* Masquer l'image mac sur mobile */
+  }
+  .lever-wheel-container {
+    flex-direction: column;
+    gap: 4vmin;
+    align-items: center;
   }
   #lever-container {
     width: 50px;
@@ -153,22 +313,23 @@ h1 {
     margin-top: 10px;
   }
 }
-
 </style>
 </head>
 <body>
 <h1>🎡 Roue des Premiers Ministres</h1>
 <p id="consigne">Bayrou est tombé, mais qui prendra sa place ? Toi aussi prends tes responsabilités : tire sur le levier et nomme un Premier ministre à la hauteur de l'enjeu !</p>
-<div class="container">
+<div class="main-container">
   <img id="mac" src="mac.png" alt="Mac">
-  <div id="lever-container">
-    <div id="lever-base"></div>
-    <div id="lever"></div>
-  </div>
-  <div id="wheel-container">
-    <div id="pointer"></div>
-    <div id="wheel"></div>
-    <div id="hover-name"></div>
+  <div class="lever-wheel-container">
+    <div id="lever-container">
+      <div id="lever-base"></div>
+      <div id="lever"></div>
+    </div>
+    <div id="wheel-container">
+      <div id="pointer"></div>
+      <div id="wheel"></div>
+      <div id="hover-name"></div>
+    </div>
   </div>
 </div>
 <button id="spinBtn">🎡 Tourner la roue</button>
@@ -182,7 +343,6 @@ h1 {
     </div>
   </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
   const data = [
@@ -204,22 +364,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
     {name:"Christine Lagarde", img:"lagarde.jpg", text:"FMI, austérité, crise grecque... Son bilan, c’est la casse sociale et la soumission aux marchés."},
     {name:"Laurent Berger", img:"berger.jpg", text:"La CFDT, sous sa direction, a souvent soutenu l’État et abandonné les travailleurs."}
   ];
-
   const wheel = document.getElementById('wheel');
   const spinBtn = document.getElementById('spinBtn');
   const overlay = document.getElementById('result-overlay');
   const nameEl = document.getElementById('res-name');
   const textEl = document.getElementById('res-text');
   const imgContainer = document.getElementById('img-container');
-  const lever = document.getElementById('lever-container'); 
+  const lever = document.getElementById('lever-container');
   const hoverName = document.getElementById('hover-name');
   let currentRotation = 0;
   const sliceAngle = 360 / data.length;
-
   const colors = ["#FF9999","#99CCFF","#99FF99","#FFFF99","#FF99FF","#FFD699","#CC99FF","#99FFFF","#BDE0FE", "#FF9AAA","#FFD1DC","#C0FFB3","#B3E5FF","#E6B3FF","#FFCCB3","#C2B3FF","#FFF0B3"];
   const wheelColors = data.map((_, i) => colors[i % colors.length]);
   wheel.style.background = `conic-gradient(${wheelColors.map((c,i)=>`${c} ${i*sliceAngle}deg ${(i+1)*sliceAngle}deg`).join(",")})`;
-
   const imgs = [];
   data.forEach((p, i) => {
     const img = document.createElement('img');
@@ -234,7 +391,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     img.addEventListener('mouseenter', ()=> { hoverName.textContent = p.name; });
     img.addEventListener('mouseleave', ()=> { hoverName.textContent = ''; });
   });
-
   function positionImages() {
     const w = wheel.clientWidth;
     const center = w / 2;
@@ -253,22 +409,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
   }
   positionImages();
   window.addEventListener('resize', positionImages);
-
   function spinWheel() {
     if(spinBtn.disabled) return;
     spinBtn.disabled = true;
     const leverEl = document.getElementById('lever');
     leverEl.style.transform = `rotate(-30deg)`;
     setTimeout(()=>leverEl.style.transform='rotate(0deg)',300);
-
     const targetIndex = Math.floor(Math.random()*data.length);
     const spins = 5*360;
     const finalAngle = 360 - (targetIndex*sliceAngle + sliceAngle/2);
     const targetRotation = currentRotation + spins + finalAngle - (currentRotation%360);
     currentRotation = targetRotation;
-
     wheel.style.transform = `rotate(${currentRotation}deg)`;
-
     const onEnd = ()=>{
       wheel.removeEventListener('transitionend',onEnd);
       showResult(data[targetIndex]);
@@ -276,7 +428,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     };
     wheel.addEventListener('transitionend',onEnd);
   }
-
   function typeWriter(el, text, speed=40) {
     el.textContent = "";
     let i=0;
@@ -289,16 +440,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
     typing();
   }
-
   function showResult(person){
     imgContainer.style.position="relative";
-
     if(person.special==="chaos"){
       spinBtn.disabled = true;
       overlay.style.display = "none";
       imgContainer.innerHTML = "";
       document.body.classList.add('shake');
-
       const chaosScreen = document.createElement('div');
       Object.assign(chaosScreen.style,{
         position:'fixed', top:'0', left:'0', width:'100%', height:'100%',
@@ -306,7 +454,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         alignItems:'center', justifyContent:'center',
         zIndex:1000, filter:'grayscale(100%)', flexDirection:'column'
       });
-
       const macImg = document.createElement('img');
       macImg.src = "mac.png";
       macImg.alt = "Mac";
@@ -314,9 +461,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       macImg.style.opacity = "0";
       chaosScreen.appendChild(macImg);
       document.body.appendChild(chaosScreen);
-
       setTimeout(()=>{ macImg.classList.add("mac-rise"); },200);
-
       setTimeout(()=>{
         const tempBox = document.createElement('div');
         Object.assign(tempBox.style,{
@@ -331,9 +476,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         tempBox.appendChild(h2);
         tempBox.appendChild(p);
         chaosScreen.appendChild(tempBox);
-
         typeWriter(p,"Le résultat de la loterie c'est comme le résultat des élections, on n’est pas obligé de le respecter.");
-
         setTimeout(()=>{
           document.body.removeChild(chaosScreen);
           document.body.classList.remove('shake');
@@ -343,20 +486,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
       },2000);
       return;
     }
-
     overlay.style.display='flex';
     imgContainer.innerHTML=`<img src="${person.img}" alt="${person.name}">`;
     nameEl.textContent = person.name;
     textEl.textContent = person.text;
     textEl.style.color="black";
-
     if(person.special==="cross"){
       const cross = document.createElement('div');
       cross.style.position="absolute";
       cross.style.top="0"; cross.style.left="0";
       cross.style.width="100%"; cross.style.height="100%";
       cross.style.pointerEvents="none";
-
       const line1=document.createElement('div');
       const line2=document.createElement('div');
       [line1,line2].forEach(line=>{
@@ -370,17 +510,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
       cross.appendChild(line1);
       cross.appendChild(line2);
       imgContainer.appendChild(cross);
-
       textEl.textContent="On a déjà essayé !";
       textEl.style.color="red";
     }
-
     if(person.special==="faure"){
       imgContainer.innerHTML=`<img src="hollande.jpg" alt="Hollande">`;
       setTimeout(()=>{imgContainer.innerHTML=`<img src="${person.img}" alt="${person.name}">`;},1000);
     }
   }
-
   document.getElementById('closeBtn').addEventListener('click',()=>{overlay.style.display='none';});
   spinBtn.addEventListener('click',spinWheel);
   lever.addEventListener('click', spinWheel);
