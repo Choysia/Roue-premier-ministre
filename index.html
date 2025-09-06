@@ -270,49 +270,61 @@ h1 {
   #mac {
     display: none; /* Masquer l'image mac sur mobile */
   }
+
+  /* ===== LEVIER À GAUCHE ===== */
   .lever-wheel-container {
-    flex-direction: column;
+    flex-direction: row;       /* levier à gauche, roue à droite */
     gap: 4vmin;
     align-items: center;
+    justify-content: center;   /* centre le tout horizontalement */
   }
+
   #lever-container {
-    width: 50px;
-    height: 180px;
+    width: 40px;               /* levier plus petit */
+    height: 140px;
   }
+
   #lever {
-    width: 15px;
-    height: 100px;
+    width: 12px;               /* tige plus fine */
+    height: 90px;              /* tige plus courte */
     bottom: 15px;
   }
+
   #lever::after {
-    width: 35px;
-    height: 35px;
-    top: -17px;
-    left: -10px;
+    width: 25px;               /* boule plus petite */
+    height: 25px;
+    top: -12px;
+    left: -6px;
   }
+
   #wheel-container {
     width: 60vmin;
     height: 60vmin;
     max-width: 300px;
     max-height: 300px;
   }
+
   #spinBtn {
     font-size: 16px;
     padding: 10px 20px;
     margin-top: 2vmin;
   }
+
   #result-box {
     flex-direction: column;
     text-align: center;
   }
+
   #result-box img {
     max-width: 80vw;
     height: auto;
   }
+
   #closeBtn {
     margin-top: 10px;
   }
 }
+
 </style>
 </head>
 <body>
@@ -351,18 +363,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
     {name:"Xavier Bertrand", img:"bertrand.jpg", text:"Toujours prompt à donner des leçons, mais aussi prompt à cumuler les échecs politiques et les revirements opportunistes."},
     {name:"Lucie Castets", img:"castets.jpg", text:"Économiste", special:"chaos"},
     {name:"Bernard Cazeneuve", img:"cazeneuve.jpg", text:"Ministre sous Hollande : affaires européennes, budget, intérieur puis Premier ministre. Résultat : l’UE ne tourne plus, le budget est en faillite et la police tue. Un CV idéal pour Matignon."},
-    {name:"Gérald Darmanin", img:"darmanin.jpg", text:"A fait du chantage à une femme pour obtenir des relations sexuelles. Un abus de pouvoir, un viol. Toujours ministre depuis 2020."},
-    {name:"François Baroin", img:"baroin.jpg", text:"Un éternel notable de droite. Historique terne, toujours là pour préserver ses intérêts."},
+    {name:"Gérald Darmanin", img:"darmanin.jpg", text:"A fait du chantage pour obtenir des relations sexuelles. Un abus de pouvoir, un viol. Toujours ministre depuis 2020."},
+    {name:"François Baroin", img:"baroin.jpg", text:"Ancien ministre passé chez Barclays tout en restant maire de Troyes : la porte tournante État-finance avant l’intérêt général."},
     {name:"Marine Le Pen", img:"lepen.jpg", text:"Saviez-vous qu’on peut devenir Première ministre tout en étant condamnée pour détournement de fonds publics ? Marine Le Pen, elle, le sait."},
     {name:"Bruno Retailleau", img:"retailleau.jpg", text:"Son slogan : ‘La France des honnêtes gens’. Chef des LR et soutien de Sarkozy, condamné pour corruption et financement illégal de campagne. Côté idées : une obsession sécuritaire et des politiques ouvertement racistes contre les étrangers et les musulmans."},
     {name:"Raphaël Glucksmann", img:"glucksmann.jpg", text:"Un autre Macron est possible."},
-    {name:"Catherine Vautrin", img:"vautrin.jpg", text:"Potentielle Première ministre depuis 2020. Mais... est-ce que ‘potentielle Première ministre’ est vraiment un métier ?"},
+    {name:"Catherine Vautrin", img:"vautrin.jpg", text:"A voté contre le mariage pour tous, a ‘regretté’ en 2023, puis a proposé 7 heures de travail gratuit pour la collectivité en 2025"},
     {name:"Michel Barnier", img:"barnier.jpg", text:"Politicien", special:"cross"},
     {name:"Olivier Faure", img:"faure.jpg", text:"Chef du PS, soutien fidèle de Hollande. Jamais frondeur, toujours suiveur, comment peut il se maintenenir debous sans colonne vertebrale ?", special:"faure"},
     {name:"Bruno Le Maire", img:"lemaire.jpg", text:"Longtemps ministre du budget, la France est en faillite. « Bruno Demande » beaucoup, mais personne ne l'écoute."},
-    {name:"Sébastien Lecornu", img:"lecornu.jpg", text:"Issu du même moule que Macron : carriériste, technocrate, sans vision pour le peuple."},
+    {name:"Sébastien Lecornu", img:"lecornu.jpg", text:"Qui de mieux placé que le ministre des armées pour faire la guerre à la société ?"},
     {name:"Christine Lagarde", img:"lagarde.jpg", text:"FMI, austérité, crise grecque... Son bilan, c’est la casse sociale et la soumission aux marchés."},
-    {name:"Laurent Berger", img:"berger.jpg", text:"La CFDT, sous sa direction, a souvent soutenu l’État et abandonné les travailleurs."}
+    {name:"Laurent Berger", img:"berger.jpg", text:"Après les avoir soutenus, voilà que la CFDT veut mettre en place les mesures d'austerité"}
   ];
   const wheel = document.getElementById('wheel');
   const spinBtn = document.getElementById('spinBtn');
